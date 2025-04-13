@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 import { CustomOptional, CustomRepeatable, CustomText, Pluralize } from './customFeatures';
 import styles from './lease-styles.module.css';
-import shared from '../shared-generator/shared.module.css';
 
 
 export const SigningPage: React.FC<{

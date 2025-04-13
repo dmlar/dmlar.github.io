@@ -1,6 +1,5 @@
 import { ChecklistBody } from "./checklistBody";
 import leaseStyles from '../lease-generator/lease-styles.module.css'
-import styles from './checklist-styles.module.css'
 import shared from '../shared-generator/shared.module.css';
 
 import { CustomFeatureContainer, CustomFeatureEdtior } from "../lease-generator/customFeatures";

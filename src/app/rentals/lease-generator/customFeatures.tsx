@@ -1,7 +1,7 @@
 "use client";
 import styles from './lease-styles.module.css';
 import shared from '../shared-generator/shared.module.css';
-import { createContext, ReactElement, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react";
 const DEFAULT_STATE = {
     fieldSet: {},
     repeatableStack: [],
@@ -279,7 +279,7 @@ export const CustomFieldSetEditor: React.FC<{
     return Object.keys(fieldSet).map((field) => {
         if (typeof fieldSet[field] === 'string') {
             return <div key={field}>
-                {field}: <input type='text' value={fieldSet[field] ?? false} onChange={(e) => setCustomField(field, e.target.value)} />
+                {field}: <input type='text' value={fieldSet[field] ?? ''} onChange={(e) => setCustomField(field, e.target.value)} />
             </div>;
         } else if (typeof fieldSet[field] === 'boolean') {
             return <div key={field}>
@@ -287,9 +287,10 @@ export const CustomFieldSetEditor: React.FC<{
             </div>;
         } else if (Array.isArray(fieldSet[field])) {
             const repeatable = fieldSet[field];
+            const outerField = field;
             return <div key={field}><hr /><b>{field}:</b> {repeatable.map((repeatableElement, index) => {
                 return <><CustomFieldSetEditor fieldSet={repeatableElement} setCustomField={(field, value) => {
-                    setCustomField(field, repeatable.with(index, {
+                    setCustomField(outerField, repeatable.with(index, {
                         ...repeatableElement,
                         [field]: value
                     }));
