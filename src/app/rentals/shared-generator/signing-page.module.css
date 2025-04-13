@@ -1,0 +1,17 @@
+.signingPage {
+    break-inside: avoid;
+}
+
+.signature, .date {
+    height: 6em;
+    border-bottom: 1px solid black;
+    margin-right: 1em;
+    margin-bottom: 0.3em;
+}
+
+.signatureSection {
+    width: 50%;
+    max-width: 18em;
+    display: inline-block;
+    vertical-align: top;
+}

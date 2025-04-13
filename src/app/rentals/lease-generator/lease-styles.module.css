@@ -1,0 +1,124 @@
+.body {
+    overflow: hidden;
+}
+.body input {
+    display: inline;
+}
+.body table, .body td, .body th {
+    border: 2px #6b6b6b solid;
+    border-collapse: collapse;
+    page-break-inside: avoid;
+    page-break-before: avoid;
+}
+.body td, .body th {
+    padding: 0.2em;
+}
+.body > div {
+    break-after: page;
+}
+
+.body .nobreak {
+    break-before: avoid !important;
+    break-after: auto !important;
+}
+
+.body > div:nth-last-child(1 of div:not(.noprint)) {
+    break-after: auto !important;
+}
+
+.body > div:last-of-type {
+    break-after: auto;
+}
+
+.body h1 {
+    font-size: 1.8em;
+    margin-bottom: 1em;
+    margin-top: 1em;
+    page-break-after: avoid;
+}
+.body h2 {
+    font-size: 1.6em;
+    margin-bottom: 0.5em;
+    margin-top:  0.5em;
+    page-break-after: avoid;
+}
+.body h3 {
+    font-size: 1.3em;
+    margin-bottom: 0.5em;
+    margin-top:  0.5em;
+    page-break-after: avoid;
+}
+.body h4 {
+    font-size: 1.1em;
+    margin-bottom: 0.5em;
+    margin-top:  0.5em;
+    page-break-after: avoid;
+}
+.body p {
+    margin: 0.3em 0 0.3em 0.6em;
+}
+.body ul, .body ol {
+    margin-left: 1.5em;
+}
+.body li {
+    margin: 0.1em 0 0.1em 0;
+}
+
+.signingPage {
+    break-inside: avoid;
+}
+
+.container {
+    display: flex;
+    direction: ltr;
+}
+
+.featureEditor {
+    width: 250px;
+}
+.customInputContainer {
+    position: relative;
+    min-width: 2em;
+    display: inline-block;
+    min-height: 1em;
+}
+.customInputContainer > input{
+    width: 100%;
+    position: absolute;
+}
+.customInputContainer > span {
+    visibility: hidden;
+    font-weight: normal;
+}
+
+@media screen {
+    .container .onlyprint {
+        display: none;
+    }
+    .body {
+        margin: 15px;
+    }
+}
+
+@media print {
+    .container .featureEditor {
+        display: none;
+    }
+
+    .container .noprint {
+        display: none;
+    }
+}
+
+@page {
+    header: '';
+    margin: 1in;
+    @bottom-right {
+        font-family: Arial, Helvetica, sans-serif;
+        content: 'Page ' counter(page) ' of ' counter(pages);
+    }
+    @bottom-left {
+        font-family: Arial, Helvetica, sans-serif;
+        content: 'Lease Agreement'
+    }
+}
