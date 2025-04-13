@@ -3,7 +3,7 @@
 import { CustomRepeatable, CustomSelect, CustomText, useFieldValue } from "../lease-generator/customFeatures";
 import { SigningPage } from "../shared-generator/signing-page";
 import styles from './checklist-styles.module.css';
-
+import shared from '../shared-generator/shared.module.css';
 
 const roomStructure = [
     "Window(s)",
@@ -64,7 +64,7 @@ export const ChecklistBody = () => {
             <h2>
                 <CustomText field="name" />
             </h2>
-            <div className={styles.noprint}>
+            <div className={shared.noprint}>
                 type: 
                 <CustomSelect options={AREAS} field="type" />
             </div>
@@ -76,12 +76,12 @@ cleaning required. Repair and replacement costs resulting from resident negligen
 This checklist is pursuant to Washington State Landlord / Tenant Law, RCW 59.18.260. Both Resident and Owner / Agent should retain a signed copy of the completed Property
 Condition Checklist with your rental agreement. 
             </p>} />
-        <div style={{ breakBefore: "always"}}>
-        <h3>Tips:</h3>
-        <ul>
-            <li>Windows: - Note the presence of mesh screen</li>
-        </ul>
-    </div>
+        <div className={shared.noprint}>
+            <h3>Tips:</h3>
+            <ul>
+                <li>Windows: - Note the presence of mesh screen</li>
+            </ul>
+        </div>
     </>;
 }
 

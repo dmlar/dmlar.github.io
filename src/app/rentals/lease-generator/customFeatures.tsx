@@ -1,5 +1,6 @@
 "use client";
 import styles from './lease-styles.module.css';
+import shared from '../shared-generator/shared.module.css';
 import { createContext, ReactElement, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react";
 const DEFAULT_STATE = {
     fieldSet: {},
@@ -168,11 +169,11 @@ export const CustomText: React.FC<{
         return '!!!ERROR CUSTOM TEXT TRYING TO READ CUSTOM REPEATABLE!!!';
     };
     return <>
-        <span className={[styles.customInputContainer, styles.noprint].join(" ")}>
-            <input className={styles.noprint} onChange={(e) => {
+        <span className={[styles.customInputContainer, shared.noprint].join(" ")}>
+            <input className={shared.noprint} onChange={(e) => {
                 setFieldValue(e.target.value)
             }} value={fieldValue} />
-            <span className={styles.noprint}>{fieldValue}</span>
+            <span className={shared.noprint}>{fieldValue}</span>
         </span>
         <span className={styles.onlyprint}>
             {fieldValue}
@@ -229,7 +230,7 @@ export const CustomOptional: React.FC<{
     if (typeof featureCtx.fieldSet[name] !== 'boolean') {
         return '!!!INVALID OPTIONAL VALUE';
     }
-    const control = <div className={[styles.noprint,styles.nobreak].join(' ')}>
+    const control = <div className={[shared.noprint,styles.nobreak].join(' ')}>
         <b>OPTIONAL {name}:</b> <input type='checkbox' checked={featureCtx.fieldSet[name] ?? false} onChange={(e) => featureCtx.setCustomField(name, e.target.checked)} />
     </div>;
     if (featureCtx.fieldSet[name] === true) {
@@ -278,7 +279,7 @@ export const CustomFieldSetEditor: React.FC<{
     return Object.keys(fieldSet).map((field) => {
         if (typeof fieldSet[field] === 'string') {
             return <div key={field}>
-                {field}: <CustomText field={field} />
+                {field}: <input type='text' value={fieldSet[field] ?? false} onChange={(e) => setCustomField(field, e.target.value)} />
             </div>;
         } else if (typeof fieldSet[field] === 'boolean') {
             return <div key={field}>

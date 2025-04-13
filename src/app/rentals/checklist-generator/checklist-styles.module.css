@@ -52,13 +52,6 @@
     height: 5rem;
 }
 
-
-@media print {
-    .noprint {
-        display: none;
-    }
-}
-
 @page {
     header: '';
     margin: 1in;
@@ -71,7 +64,6 @@
         content: 'Move-in Checklist'
     }
 }
-
 
 /* CSS fake table */
 .table {
