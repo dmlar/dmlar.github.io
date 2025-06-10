@@ -7,8 +7,8 @@ import './styles.css';
 export default function LeasePage() {
     return <CustomFeatureContainer>
         <div className={styles.container}>
-            <div className={styles.featureEditor}>
-                <CustomFeatureEdtior />
+            <div className={shared.featureEditor}>
+                <CustomFeatureEdtior templateType="lease" />
             </div>
             <div className={shared.body}>
                 <LeaseBody />

@@ -22,6 +22,7 @@ const AREA_ITEM_MAP = {
         "Shower",
         "Cabinet",
         "Cabinet Countertop",
+        "Mirror",
         "Fan",
         ...roomStructure
     ],
@@ -42,6 +43,10 @@ const AREA_ITEM_MAP = {
     ],
     "other": [
         "Thermostat"
+    ],
+    "laundry": [
+        "Washer",
+        "Dryer"
     ]
 } as const;
 const AREAS = Object.keys(AREA_ITEM_MAP) as unknown as Array<keyof typeof AREA_ITEM_MAP>;
@@ -49,7 +54,7 @@ const AREAS = Object.keys(AREA_ITEM_MAP) as unknown as Array<keyof typeof AREA_I
 export const ConditionScale = () => {
     return ["Poor","Fair","Average","Good","Very Good"].map(grade => {
         return <label key={grade}>
-            <input type="checkbox"  />{grade}{"\u00A0"}
+            <input type="checkbox"  />{"\u00A0"}{grade}{"\u00A0"}
         </label>
     });
 }

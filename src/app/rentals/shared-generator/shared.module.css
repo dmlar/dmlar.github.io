@@ -1,19 +1,26 @@
 .body {
     overflow: hidden;
 }
+
 .body input {
     display: inline;
 }
-.body table, .body td, .body th {
+
+.body table,
+.body td,
+.body th {
     border: 2px #6b6b6b solid;
     border-collapse: collapse;
     page-break-inside: avoid;
     page-break-before: avoid;
 }
-.body td, .body th {
+
+.body td,
+.body th {
     padding: 0.2em;
 }
-.body > div {
+
+.body>div {
     break-after: page;
 }
 
@@ -22,11 +29,11 @@
     break-after: auto !important;
 }
 
-.body > div:nth-last-child(1 of div:not(.noprint)) {
+.body>div:nth-last-child(1 of div:not(.noprint)) {
     break-after: auto !important;
 }
 
-.body > div:last-of-type {
+.body>div:last-of-type {
     break-after: auto;
 }
 
@@ -36,30 +43,37 @@
     margin-top: 1em;
     page-break-after: avoid;
 }
+
 .body h2 {
     font-size: 1.6em;
     margin-bottom: 0.5em;
-    margin-top:  0.5em;
+    margin-top: 0.5em;
     page-break-after: avoid;
 }
+
 .body h3 {
     font-size: 1.3em;
     margin-bottom: 0.5em;
-    margin-top:  0.5em;
+    margin-top: 0.5em;
     page-break-after: avoid;
 }
+
 .body h4 {
     font-size: 1.1em;
     margin-bottom: 0.5em;
-    margin-top:  0.5em;
+    margin-top: 0.5em;
     page-break-after: avoid;
 }
+
 .body p {
     margin: 0.3em 0 0.3em 0.6em;
 }
-.body ul, .body ol {
+
+.body ul,
+.body ol {
     margin-left: 1.5em;
 }
+
 .body li {
     margin: 0.1em 0 0.1em 0;
 }
@@ -68,6 +82,7 @@
     .onlyprint {
         display: none;
     }
+
     .body {
         margin: 15px;
     }
@@ -77,8 +92,23 @@
     .noprint {
         display: none;
     }
+
+    .featureEditor {
+        display: none;
+    }
 }
 
-.body > div:nth-last-child(1 of div:not(.noprint)) {
+.body>div:nth-last-child(1 of div:not(.noprint)) {
     break-after: auto !important;
+}
+
+.featureEditor {
+    width: 250px;
+    padding: 5px;
+}
+
+.fieldGroup {
+    padding: 5px;
+    background-color: #e4e4e4;
+    margin-bottom: 5px;
 }

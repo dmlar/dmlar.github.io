@@ -7,9 +7,6 @@
     direction: ltr;
 }
 
-.featureEditor {
-    width: 250px;
-}
 .customInputContainer {
     position: relative;
     min-width: 2em;
@@ -35,9 +32,6 @@
 }
 
 @media print {
-    .container .featureEditor {
-        display: none;
-    }
 
     .container .noprint {
         display: none;

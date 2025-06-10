@@ -17,9 +17,12 @@ export const SigningPage: React.FC<{
                 <div className="signature"></div>
                 <CustomText field='name' />
             </CustomRepeatable>
+        
         <h3>LANDLORD SIGNATURE</h3>
-        <div className="signature"></div>
-        <CustomText field='landlordName' />
+        <CustomRepeatable field="landlord">
+            <div className="signature"></div>
+            <CustomText field='name' />
+        </CustomRepeatable>
     </div>;
 }
 
@@ -27,19 +30,24 @@ export const LeaseBody = () => {
     return <>
         <div>
             <h1>Residential Lease Agreement</h1>
-            <h2>106 12th Ave E, Seattle, Washington 98102</h2>
+            <h2><CustomText field="unitAddress" /></h2>
         </div>
         <div>
             <p>
                 This Residential Lease (Lease) is entered into on the date of the last signature below (the Effective Date) between <br />
-                <b><CustomText field="landlordName" /> (Landlord)</b> and <br />
+                <CustomRepeatable field="landlord" join={"grammar_and"}>
+                        <b><CustomText field="name" /></b> 
+                    </CustomRepeatable><Pluralize field='tenant'>{[
+                        <b> (Landlord)</b>,
+                        <> (together and separately <b>Landlord</b>)</>
+                    ]}</Pluralize><br /> and <br />
                 <CustomRepeatable field="tenant" join={"grammar_and"}>
                         <b><CustomText field="name" /></b> 
                     </CustomRepeatable><Pluralize field='tenant'>{[
                         <b> (Tenant)</b>,
                         <> (together and separately <b>Tenant</b>)</>
                     ]}</Pluralize><br />
-                for <b>106 12th Ave E Seattle, WA 98102 (Property)</b>
+                for <b><CustomText field="unitAddress" /> (Property)</b>
             </p>
             <h2>1. Basic Terms</h2>
             <h3>1.1 AMOUNTS DUE FROM TENANT UPFRONT</h3>
@@ -53,7 +61,7 @@ export const LeaseBody = () => {
             </p>  
             <h4>1.1.3. Total Due Upfront</h4>
             <p>
-                <b>$<CustomText field='holdingDeposit' /></b> due at signing.
+                <b>$<CustomText field='holdingDeposit' /></b> holding deposit due at signing.
             </p>
             <p>
                 <b>$<CustomText field='totalMoveInCost' /></b> due at Start Date.
@@ -91,7 +99,9 @@ export const LeaseBody = () => {
                 The Property includes all appliances, fixtures, and equipment installed on the Property as of the Start Date (as defined below), including the following:
             </p>
             <p>
-                <b>Refrigerator; Oven/range; Microwave; Dishwasher.</b>
+                <b>Refrigerator; Oven/range; Microwave; <CustomRepeatable field="appliances" join={'; '}>
+                        <CustomText field='appliance' />
+                    </CustomRepeatable>.</b>
             </p>
             <CustomOptional name='106disclaimer'>
                 <p>
@@ -225,14 +235,24 @@ export const LeaseBody = () => {
                 Landlord or Tenant may not intentionally cause termination of any utility services, including water, heat, electricity, or gas, except for an interruption of utility services for a reasonable time in order to make necessary repairs or as a result of the normal occupancy of the Property. Landlord and Tenant agree that utilities and other services will be provided and paid for as outlined below:
             </p>
             <h3>1.5.1. Electricity</h3>
-            <p>
-                Tenant will arrange and pay for the cost of electrical service for the Property directly to the service provider. The name of the Property's electrical service provider is: <b><CustomText field='electricProvider' /></b>.
-            </p>
+            <CustomOptional alternative name="externalElectricBill">
+                <p>
+                    Tenant will arrange and pay for the cost of electrical service for the Property directly to the service provider. The name of the Property's electrical service provider is: <b><CustomText field='electricProvider' /></b>.
+                </p>
+                <p>
+                    Landlord will provide electricity service to the Property, and Tenant will pay Landlord a variable monthly charge <b>(Electricity Charge)</b> to reimburse Landlord for the cost of electricity service. The Electricity Charge is a variable amount that is <CustomText field='tenantUtilityPortion'/> of the cost incurred by the Landlord to provide water and sewer service to the Property.
+                </p>
+            </CustomOptional>
             <h3>1.5.2. Natural Gas</h3>
-            <p>
-                Natural gas service is provided to the Property and Tenant will arrange and pay for the cost of natural gas service for the
-                Property directly to the service provider. The name of the Property's natural gas service provider is:<b><CustomText field='gasProvider' /></b>
-            </p>
+            <CustomOptional alternative name="externalGasBill">
+                <p>
+                    Natural gas service is provided to the Property and Tenant will arrange and pay for the cost of natural gas service for the
+                    Property directly to the service provider. The name of the Property's natural gas service provider is:<b><CustomText field='gasProvider' /></b>
+                </p>
+                <p>
+                    Landlord will provide natural gas service to the Property, and Tenant will pay Landlord a variable monthly charge <b>(Natural Gas Charge)</b> to reimburse Landlord for the cost of natural gas service. The Natural Gas Charge is a variable amount that is <CustomText field='tenantUtilityPortion'/> of the cost incurred by the Landlord to provide water and sewer service to the Property.
+                </p>
+            </CustomOptional>
             <h3>1.5.3. Heat</h3>
             <p>
                 Heat is not provided separately from other utilities. The cost of heat is included in the utility costs (natural gas, electricity, or heating oil, as provided) necessary to run the heating system, and will be paid by the party responsible for the applicable utility.
@@ -493,7 +513,7 @@ export const LeaseBody = () => {
             <h2>
                 2.16. CONTACT INFORMATION
             </h2>
-            <h3>2.16.1 Tenant</h3>
+            <h3>2.16.1. Tenant</h3>
             <p>Tenant's address is required for notice prior to the Start Date. Notices after the Start Date will be made to the Property.</p>
             <table>
                 <tr>
@@ -511,7 +531,7 @@ export const LeaseBody = () => {
                     </tr>
                 </CustomRepeatable>
             </table>
-            <h2>2.16.2. Landlord & Managing Agent</h2>
+            <h3>2.16.2. Landlord & Managing Agent</h3>
             <table>
                 <tr>
                     <th>Landlord Name</th>
@@ -519,12 +539,14 @@ export const LeaseBody = () => {
                     <th>Phone</th>
                     <th>Email</th>
                 </tr>
-                <tr>
-                    <td><b><CustomText field='landlordName' /></b></td>
-                    <td><b><CustomText field='landlordAddress' /></b></td>
-                    <td><b><CustomText field='landlordPhone' /></b></td>
-                    <td><b><CustomText field='landlordEmail' /></b></td>
-                </tr>
+                <CustomRepeatable field='landlord'>
+                    <tr>
+                        <td><b><CustomText field='name' /></b></td>
+                        <td><b><CustomText field='address' /></b></td>
+                        <td><b><CustomText field='phone' /></b></td>
+                        <td><b><CustomText field='email' /></b></td>
+                    </tr>
+                </CustomRepeatable>
             </table>
         </div>
         <div>
@@ -535,8 +557,10 @@ export const LeaseBody = () => {
                 <CustomText field='name' />
             </CustomRepeatable>
             <h4>LANDLORD SIGNATURE</h4>
-            <div className="signature"></div>
-            <CustomText field='landlordName' />
+            <CustomRepeatable field="landlord">
+                <div className="signature"></div>
+                <CustomText field='name' />
+            </CustomRepeatable>
         </div>
         <div>
             <h2>Pet Addendum</h2>
@@ -618,11 +642,14 @@ export const LeaseBody = () => {
                 the Lease.
             </p>
             <p>
-                Tenant may park <b>1</b> vehicles in the parking area located on the grounds of the Building during the Lease term. Landlord shall be entitled to require all vehicles parking in the Parking Area to be registered with Landlord including, without limitation, providing Landlord with any required information, such as the vehicle license plate number and the owner's name and contact information. Landlord shall be entitled to institute parking controls and other measures including, without limitation, requiring vehicle tags or decals and installing access gates with security cards or access codes. Landlord may impose reasonable and customary charges on Tenant and other Occupants for security cards and/or vehicle tags or decals.
+                Tenant may park <b><CustomText field="vehicleCount" /></b> vehicles in the parking area located on the grounds of the Building during the Lease term. Landlord shall be entitled to require all vehicles parking in the Parking Area to be registered with Landlord including, without limitation, providing Landlord with any required information, such as the vehicle license plate number and the owner's name and contact information. Landlord shall be entitled to institute parking controls and other measures including, without limitation, requiring vehicle tags or decals and installing access gates with security cards or access codes. Landlord may impose reasonable and customary charges on Tenant and other Occupants for security cards and/or vehicle tags or decals.
             </p>
             <p>
                 No vehicles other than Registered Vehicles may be parked in the parking area by Tenant, any other Occupant, or any of their guests. If Tenant replaces any of the Registered Vehicles, Tenant must notify Landlord of that replacement and provide Landlord with the new identification information (as set forth above) for the replacement vehicle prior to parking that vehicle in the parking area.
             </p>
+            <CustomOptional name="payingParkingRent">
+
+            
             <h3>PARKING RENT</h3>
             <p>
                 Tenant may park in areas designated by Landlord on Building grounds (<b>Parking Area</b>) and will pay parking rent of $<CustomText field='parkingRent' /> total per month (<b>Parking Rent</b>) for <b><CustomText field='carCount' /></b> car(s).
@@ -653,8 +680,9 @@ export const LeaseBody = () => {
                 NATURE OF PARKING RIGHTS
             </h3>
             <p>
-                Tenant has the right to park only in the following reserved space(s): space 2 (<b>Tenant Spaces</b>). Tenant may not park in any spaces in the parking area other than the Tenant Spaces. No other tenant has the right to park in the Tenant Spaces.
+                Tenant has the right to park only in the following reserved space(s): <CustomText field="parkingSpace" /> (<b>Tenant Spaces</b>). Tenant may not park in any spaces in the parking area other than the Tenant Spaces. No other tenant has the right to park in the Tenant Spaces.
             </p>
+            </CustomOptional>
             <h3>
                 PARKING RULES AND REGULATIONS
             </h3>
@@ -677,6 +705,68 @@ export const LeaseBody = () => {
             </p>
         </div>
         <SigningPage addendumName="Parking Addendum" />
+        <CustomOptional name='cosignerAddendum' >
+            <div>
+                <h2>Cosigner Agreement/Guarantee Addendum</h2>
+
+                <h3>1.1. Terms</h3>
+                <p>
+                    For value received, in consideration for, and to induce Landlord to enter into the Lease, the undersigned, jointly and severally with any other guarantors of the Lease (together and separately <b>Cosigner</b>), unconditionally guarantees to Landlord, its successors and assigns, the payment of (i) all rent and other charges to be paid by Tenant(s) under the Lease, (ii) all reasonable costs and expenses incurred by Landlord in repairing any damage to the Property caused by improper use by Tenant, any Occupant, or any guests of Tenant or an Occupant, less any amounts obtained from the Security Deposit, (iii) all of Landlord's court costs and reasonable attorneys' fees and expenses incurred in connection with any legal proceedings against Tenant and/or Cosigner, to the extent permitted under applicable law, and (iv) observance of all terms, covenants, conditions, and agreements to be performed and observed by the Tenant(s) under the Lease, without requiring notice of nonpayment, nonperformance, or nonobservance, or any proof of notice or demand, all of which the undersigned expressly waives. This Guarantee is a guarantee of payment and performance, not of collection.
+                </p>
+                <p>
+                    This Guarantee shall remain in full force and effect notwithstanding any extension, renewal, modification, amendment, assignment, or termination of the Lease, whether or not the Cosigner has notice thereof. The obligations of the Cosigner shall not be released, diminished, or impaired by any delay, waiver, indulgence, or failure by Landlord to enforce any of its rights under the Lease.
+                </p>
+                <p>
+                    The Cosigner further waives all defenses and notices that might otherwise be available in law or equity, including but not limited to those based on any invalidity or unenforceability of the Lease, lack of enforcement by Landlord, or any lack of obligation on the part of the Tenant.
+                </p>
+
+                <p>
+                    The undersigned unconditionally agrees that any legal action brought under this Cosigner Agreement may be brought in state or federal court located in King County, Washington, and the undersigned unconditionally consents to the jurisdiction of such court in connection with any cause of action brought by or against Tenant(s) and/or the undersigned in any way directly or indirectly related to the Lease or this Cosigner Agreement. The undersigned irrevocably and unconditionally appoints Tenant as the undersigned's duly authorized agent for service of process in connection with any such cause of action; provided, however, that no language contained in this Cosigner Agreement shall prevent the Landlord from serving process in any other manner permitted by law, including certified mail to the most recent address on file, personal service, or any other method allowed by applicable state or federal rules.
+                </p>
+
+                <p>
+                    Nothing in this Cosigner Agreement shall be construed to give the undersigned any right of possession to the apartment unit as described in the Lease.
+                </p>
+
+                <h3>1.2. Cosigner Contact and Notice</h3>
+                <h4>1.2.1. Notice of Address or Contact Information Change</h4>
+                <p>
+                    Cosigner agrees to promptly notify Landlord in writing of any change to their mailing address, phone number, or email address used for notice purposes. Notice must be provided within ten (10) days of the change. Until Landlord receives written notice of an updated address or contact information, any notice sent to the last address or contact details provided by the Cosigner shall be deemed valid and effective.
+                </p>
+
+                <h4>1.2.2. Cosigner Contact Information</h4>
+                <table>
+                    <tr>
+                        <th>Cosigner Name</th>
+                        <th>Address for Notice</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                    </tr>
+                    <CustomRepeatable field="cosigner">
+                        <tr>
+                            <td><b><CustomText field='name' /></b></td>
+                            <td><b><CustomText field='address' /></b></td>
+                            <td><b><CustomText field='phone' /></b></td>
+                            <td><b><CustomText field='email' /></b></td>
+                        </tr>
+                    </CustomRepeatable>
+                </table>
+
+                <h3>1.3. Delivery</h3>
+                <p>
+                    The undersigned has caused this Cosigner Agreement to be executed and delivered to the Landlord.
+                </p>
+            </div>
+
+            <SigningPage addendumName="cosigner Addendum" customText={<>
+                IN WITNESS WHEREOF, Tenant, Cosigner, and Landlord hereby agree to this Cosigner Agreement/Guarantee Addendum.
+                <h3>COSIGNER SIGNATURE</h3>
+                <CustomRepeatable field="cosigner">
+                    <div className="signature"></div>
+                    <CustomText field='name' />
+                </CustomRepeatable>
+            </>} />
+        </CustomOptional>
         <div>
             <h2>Rules Addendum</h2>
             <p>
@@ -707,8 +797,16 @@ export const LeaseBody = () => {
                     Tenant may not fasten anything to the fixtures, appliances, or to the interior or exterior of the property.
                 </li>
                 <li>
-                    Any balcony or porch included in Property, or adjacent to Property, may not be altered by Tenant or used to
-                    store their personal belongings.
+                    Any balcony, patio, or porch included in Property, or adjacent to Property, may not be altered by Tenant or used to
+                    store their personal belongings. <CustomOptional name="901bExemptPorchItems">
+                        Exempt items:
+                        <ul>
+                            <li>One (1) bicycle or scooter per tenant;</li>
+                            <li>One (1) charcoal or gass barbeque;</li>
+                            <li>Up to ten (10) items of patio furniture of reasonable size.</li>
+                            <li>Additional items permitted by Landlord in writing.</li>
+                        </ul>
+                    </CustomOptional>
                 </li>
                 <li>
                     Any common area, laundry room, hallway, or entry way will not be used by the Tenant to store personal property. The Landlord reserves the right to immediately remove and dispose of any property left in common areas.
@@ -717,7 +815,7 @@ export const LeaseBody = () => {
                     No laundry or other items will be hung from any window, balcony, or porch.
                 </li>
                 <li>
-                    Tenant may not bring anything onto the property or grounds which could increase the risk of fire (e.g., flammable chemicals).
+                    Tenant may not bring anything onto the property or grounds which could increase the risk of fire (e.g., flammable chemicals, fireworks).
                 </li>
                 <li>
                     Tenant won't place any sign, advertisement, or notice so that it's visible outside the property.

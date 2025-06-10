@@ -1,0 +1,191 @@
+{
+    "104 12th Ave E": {
+        "checklist": {
+            "propertyAddress": "104 12th Ave E, Seattle, WA, 98102",
+            "area": [
+                {
+                    "type": "bathroom",
+                    "name": "Bathroom"
+                },
+                {
+                    "type": "kitchen",
+                    "name": "Kitchen"
+                },
+                {
+                    "type": "living_room",
+                    "name": "Living Room"
+                },
+                {
+                    "type": "bedroom",
+                    "name": "East Bedroom"
+                },
+                {
+                    "type": "bedroom",
+                    "name": "West Bedroom"
+                },
+                {
+                    "type": "laundry",
+                    "name": "Laundry"
+                },
+                {
+                    "type": "other",
+                    "name": "Other"
+                }
+            ],
+            "tenant": [],
+            "landlordName": "Dean Larsen"
+        },
+        "lease": {
+            "unitAddress": "104 12th Ave E, Seattle, WA, 98102",
+            "landlordName": "Dean Larsen",
+            "tenant": [
+            ],
+            "multifamilyAddress": "106 12th Ave E, Seattle, WA, 98102",
+            "106disclaimer": false,
+            "duePeriodVariableCharges": "15",
+            "lateFee": "$10.00",
+            "check recipient": "DMLAR LLC",
+            "electricProvider": "Seattle City Light",
+            "gasProvider": "Puget Sound Energy",
+            "106 electric disclaimer": false,
+            "depositBank": "Thread Bank",
+            "depositBankAddress": "210 E Main St, Rogersville, TN 37857",
+            "landlordAddress": "210 Boylston Ave E, Apt 307, Seattle, WA, 98102",
+            "landlordPhone": "425-375-5995",
+            "landlordEmail": "rentals@dmlar.com",
+            "pet": [
+            ],
+            "renewalRateGuarantee": false,
+            "appliances": [
+                {
+                    "appliance": "Washing Machine"
+                },
+                {
+                    "appliance": "Dryer"
+                },
+                {
+                    "appliance": "Dishwasher"
+                }
+            ]
+        }
+    },
+    "106 12th Ave E": {
+        "checklist": {
+        },
+        "lease": {
+            "unitAddress": "106 12th Ave E, Seattle, WA, 98102",
+            "tenant": [
+            ],
+            "multifamilyAddress": "106 12th Ave E, Seattle, WA, 98102",
+            "106disclaimer": true,
+            "duePeriodVariableCharges": "15",
+            "lateFee": "$10.00",
+            "check recipient": "DMLAR LLC",
+            "electricProvider": "Seattle City Light",
+            "gasProvider": "Puget Sound Energy",
+            "106 electric disclaimer": true,
+            "depositBank": "Thread Bank",
+            "depositBankAddress": "210 E Main St, Rogersville, TN 37857",
+            "tenantUtilityPortion": "one-third",
+            "externalGasBill": true,
+            "externalElectricBill": true,
+            "landlord": {
+                "name": "Dean Larsen",
+                "address": "210 Boylston Ave E, Apt 307, Seattle, WA, 98102",
+                "phone": "425-375-5995",
+                "email": "rentals@dmlar.com"
+            },
+            "pet": [
+            ],
+            "renewalRateGuarantee": false,
+            "appliances": [
+                {
+                    "appliance": "Dishwasher"
+                }
+            ]
+        },
+        "optionals": {}
+    },
+    "901 24th Ave S Unit B": {
+        "lease": {
+            "unitAddress": "901 24th Ave S Unit B, Seattle, WA, 98144",
+            "tenant": [
+            ],
+            "multifamilyAddress": "901 24th Ave S, Seattle, WA, 98144",
+            "106disclaimer": false,
+            "duePeriodVariableCharges": "15",
+            "lateFee": "$10.00",
+            "check recipient": "ANDL LLC",
+            "electricProvider": "Seattle City Light",
+            "gasProvider": "Puget Sound Energy",
+            "106 electric disclaimer": false,
+            "depositBank": "Thread Bank",
+            "payingParkingRent": false,
+            "parkingSpace": "NONE",
+            "901bExemptPorchItems": true,
+            "depositBankAddress": "210 E Main St, Rogersville, TN 37857",
+            "tenantUtilityPortion": "Forty percent (40%)",
+            "externalGasBill": false,
+            "externalElectricBill": false,
+            "landlord": [{
+                "name": "Dean Larsen",
+                "address": "210 Boylston Ave E, Apt 307, Seattle, WA, 98102",
+                "phone": "425-375-5995",
+                "email": "rentals@andlrealty.com"
+            },{
+                "name": "Ahmad Nawaz",
+                "address": "901 24th Ave S, Unit A, Seattle, WA, 98144",
+                "phone": "916-425-7367",
+                "email": "rentals@andlrealty.com"
+            }],
+            "pet": [
+            ],
+            "renewalRateGuarantee": false,
+            "appliances": [
+            ]
+        },
+        "checklist": {
+            "propertyAddress": "901 24th Ave S Unit B, Seattle, WA, 98144",
+            "area": [
+                {
+                    "type": "bathroom",
+                    "name": "Bathroom"
+                },
+                {
+                    "type": "kitchen",
+                    "name": "Kitchen"
+                },
+                {
+                    "type": "living_room",
+                    "name": "Living Room"
+                },
+                {
+                    "type": "bedroom",
+                    "name": "South West Bedroom"
+                },
+                {
+                    "type": "bedroom",
+                    "name": "South East Bedroom"
+                },
+                {
+                    "type": "bedroom",
+                    "name": "North East Bedroom"
+                },
+                {
+                    "type": "laundry",
+                    "name": "Laundry"
+                },
+                {
+                    "type": "other",
+                    "name": "Other"
+                }
+            ],
+            "tenant": [],
+            "landlord": [{
+                "name": "Dean Larsen"
+            },{
+                "name": "Ahmad Nawaz"
+            }]
+        }
+    }
+}

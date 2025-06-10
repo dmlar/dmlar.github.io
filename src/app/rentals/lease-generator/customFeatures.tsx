@@ -2,6 +2,8 @@
 import styles from './lease-styles.module.css';
 import shared from '../shared-generator/shared.module.css';
 import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import templates from '@/data/leaseTemplates.json';
+
 const DEFAULT_STATE = {
     fieldSet: {},
     repeatableStack: [],
@@ -10,6 +12,7 @@ const DEFAULT_STATE = {
     setLeaseName: () => { },
     setCustomField: () => { },
     setOptional: () => { },
+    setCustomState: () => { }
 };
 
 export const CustomFeatureContext = createContext<CustomFeatureContextState>(DEFAULT_STATE);
@@ -27,7 +30,8 @@ type CustomRepeatable = Array<Record<string, CustomValue>>
 type CustomValue = string | CustomRepeatable | boolean;
 type CustomFeatureContextState = CustomFeatureState & {
     setCustomField: (field: string, value: CustomValue) => void
-    setOptional: (field: string, value: boolean) => void
+    setOptional: (field: string, value: boolean) => void,
+    setCustomState: React.Dispatch<React.SetStateAction<CustomFeatureState>>
 }
 
 const getLeaseName = () => {
@@ -87,6 +91,7 @@ export const CustomFeatureContainer: React.FC<{ children: React.ReactNode }> = (
                     leaseName
                 }));
             },
+            setCustomState,
             setCustomField: (field: string, value: CustomValue) => {
                 setCustomState(state => ({
                     ...state,
@@ -112,8 +117,8 @@ export const CustomFeatureContainer: React.FC<{ children: React.ReactNode }> = (
     </CustomFeatureContext.Provider>;
 }
 
-const readFieldValue = (state: CustomFeatureContextState, field: string): CustomValue|undefined => {
-    return state.repeatableStack.reduceRight<CustomValue|undefined>((foundValue, fieldSet) => {
+const readFieldValue = (state: CustomFeatureContextState, field: string): CustomValue | undefined => {
+    return state.repeatableStack.reduceRight<CustomValue | undefined>((foundValue, fieldSet) => {
         if (foundValue != null) {
             return foundValue;
         }
@@ -121,14 +126,14 @@ const readFieldValue = (state: CustomFeatureContextState, field: string): Custom
             return fieldSet[field];
         }
         return undefined;
-    },undefined) ?? state.fieldSet[field];
+    }, undefined) ?? state.fieldSet[field];
 }
 
 export const CustomSelect: React.FC<{
     field: string,
     options: string[]
 }> = ({ field, options }) => {
-    const {fieldValue,setFieldValue} = useFieldValue(field);
+    const { fieldValue, setFieldValue } = useFieldValue(field);
     if (typeof fieldValue !== 'string') {
         return '!!!ERROR CUSTOM TEXT TRYING TO READ CUSTOM REPEATABLE!!!';
     };
@@ -158,13 +163,13 @@ export const useFieldValue = (field: string) => {
                 featureCtx.setCustomField(field, value)
             }
         }
-    }, [featureCtx,field]);
+    }, [featureCtx, field]);
 }
 
 export const CustomText: React.FC<{
     field: string
 }> = ({ field }) => {
-    const {fieldValue,setFieldValue} = useFieldValue(field);
+    const { fieldValue, setFieldValue } = useFieldValue(field);
     if (typeof fieldValue !== 'string') {
         return '!!!ERROR CUSTOM TEXT TRYING TO READ CUSTOM REPEATABLE!!!';
     };
@@ -182,7 +187,7 @@ export const CustomText: React.FC<{
     </>;
 }
 
-export const CustomRepeatable: React.FC<{ field: string, join?: ReactNode|'grammar_and', children: React.ReactNode }> = ({ field, children, join }) => {
+export const CustomRepeatable: React.FC<{ field: string, join?: ReactNode | 'grammar_and', children: React.ReactNode }> = ({ field, children, join }) => {
     const featureCtx = useContext(CustomFeatureContext);
     const fieldValue = featureCtx.fieldSet[field];
     useEffect(() => {
@@ -201,7 +206,7 @@ export const CustomRepeatable: React.FC<{ field: string, join?: ReactNode|'gramm
                         [innerField]: value
                     }));
                 },
-                repeatableStack: [...featureCtx.repeatableStack,elementValue]
+                repeatableStack: [...featureCtx.repeatableStack, elementValue]
             } satisfies CustomFeatureContextState;
         });
     }, [fieldValue, featureCtx, field]);
@@ -210,17 +215,18 @@ export const CustomRepeatable: React.FC<{ field: string, join?: ReactNode|'gramm
     }
     return innerCtxValues.map((innerFeatureCtx, index) => {
         return <CustomFeatureContext.Provider value={innerFeatureCtx}>
-            {join === 'grammar_and' ? 
-            <>{children}{(index < innerCtxValues.length - 2) && ', '}{(index === innerCtxValues.length - 2) && ' and '}</> : 
-            <>{children}{(index !== innerCtxValues.length - 1) && join}</>}
+            {join === 'grammar_and' ?
+                <>{children}{(index < innerCtxValues.length - 2) && ', '}{(index === innerCtxValues.length - 2) && ' and '}</> :
+                <>{children}{(index !== innerCtxValues.length - 1) && join}</>}
         </CustomFeatureContext.Provider>
     });
 }
 
 export const CustomOptional: React.FC<{
     children: React.ReactNode,
+    alternative?: boolean,
     name: string,
-}> = ({ children, name }) => {
+}> = ({ children, alternative = false, name }) => {
     const featureCtx = useContext(CustomFeatureContext);
     useEffect(() => {
         if (featureCtx.fieldSet[name] === undefined) {
@@ -230,10 +236,19 @@ export const CustomOptional: React.FC<{
     if (typeof featureCtx.fieldSet[name] !== 'boolean') {
         return '!!!INVALID OPTIONAL VALUE';
     }
-    const control = <div className={[shared.noprint,styles.nobreak].join(' ')}>
+    const control = <div className={[shared.noprint, styles.nobreak].join(' ')}>
         <b>OPTIONAL {name}:</b> <input type='checkbox' checked={featureCtx.fieldSet[name] ?? false} onChange={(e) => featureCtx.setCustomField(name, e.target.checked)} />
     </div>;
-    if (featureCtx.fieldSet[name] === true) {
+    const currentValue = featureCtx.fieldSet[name] === true;
+    if (alternative) {
+        if (!Array.isArray(children) || children.length !== 2) {
+            return '!!!INVALID ALTERNATE CHILDREN. MUST BE ARRAY LENGTH 2';
+        }
+        return <>
+            {currentValue ? children?.[0] : children?.[1]}
+        </>;
+    }
+    if (currentValue) {
         return <>
             {control}
             {children}
@@ -242,7 +257,31 @@ export const CustomOptional: React.FC<{
     return control;
 }
 
-export const CustomFeatureEdtior: React.FC = () => {
+export type templateType = "checklist" | "lease";
+
+export const CustomFeatureTemplateSelector: React.FC<{ templateType: templateType }> = ({ templateType }) => {
+    const featureCtx = useContext(CustomFeatureContext);
+    return <select onChange={(e) => {
+        const fieldSet = templates[e.target.value as unknown as keyof typeof templates][templateType];
+        if (fieldSet !== undefined) {
+            featureCtx.setCustomState(state => ({
+                ...state,
+                fieldSet: {
+                    ...state.fieldSet,
+                    ...fieldSet
+                }
+            }));
+        }
+    }}>
+        <option disabled={true} selected={true}>select a template</option>
+        {Object.keys(templates).map((templateName) => {
+            return <option key={templateName}>{templateName}</option>;
+        })};
+    </select>
+
+}
+
+export const CustomFeatureEdtior: React.FC<{ templateType: templateType }> = ({ templateType }) => {
     const featureCtx = useContext(CustomFeatureContext);
     // Create a Blob object
     const blob = new Blob([JSON.stringify(featureCtx, undefined, 4)], { type: "text/plain" });
@@ -251,14 +290,15 @@ export const CustomFeatureEdtior: React.FC = () => {
     const blobUrl = URL.createObjectURL(blob);
     return <div>
         Lease name: <input value={featureCtx.leaseName ?? ''} onChange={(e) => featureCtx.setLeaseName(e.target.value)} />
+        <CustomFeatureTemplateSelector templateType={templateType} />
         <CustomFieldSetEditor fieldSet={featureCtx.fieldSet} setCustomField={featureCtx.setCustomField} />
         <a href={blobUrl} download={`${featureCtx.leaseName}_settings.json`}>Download</a>
     </div>;
 }
 
-export const Pluralize: React.FC<{field: string, children: ReactNode[]}> = ({field, children}) => {
+export const Pluralize: React.FC<{ field: string, children: ReactNode[] }> = ({ field, children }) => {
     const featureCtx = useContext(CustomFeatureContext);
-    const fieldValue = readFieldValue(featureCtx,field);
+    const fieldValue = readFieldValue(featureCtx, field);
     if (children.length !== 2) {
         return '!!!MUST HAVE EXACTLY TWO CHILDREN';
     }
@@ -288,8 +328,8 @@ export const CustomFieldSetEditor: React.FC<{
         } else if (Array.isArray(fieldSet[field])) {
             const repeatable = fieldSet[field];
             const outerField = field;
-            return <div key={field}><hr /><b>{field}:</b> {repeatable.map((repeatableElement, index) => {
-                return <><CustomFieldSetEditor fieldSet={repeatableElement} setCustomField={(field, value) => {
+            return <div key={field} ><hr /><b>{field}:</b> {repeatable.map((repeatableElement, index) => {
+                return <div className={shared.fieldGroup} key={index}><CustomFieldSetEditor fieldSet={repeatableElement} setCustomField={(field, value) => {
                     setCustomField(outerField, repeatable.with(index, {
                         ...repeatableElement,
                         [field]: value
@@ -298,7 +338,7 @@ export const CustomFieldSetEditor: React.FC<{
                     <button onClick={() => {
                         setCustomField(field, repeatable.filter((_, i) => i !== index));
                     }}>X</button>
-                </>
+                </div>
             })}
                 <button onClick={() => {
                     setCustomField(field, [...repeatable, {}]);

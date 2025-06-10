@@ -7,8 +7,8 @@ import { CustomFeatureContainer, CustomFeatureEdtior } from "../lease-generator/
 export default function ChecklistPage() {
     return <CustomFeatureContainer>
         <div className={leaseStyles.container}>
-            <div className={leaseStyles.featureEditor}>
-                <CustomFeatureEdtior />
+            <div className={shared.featureEditor}>
+                <CustomFeatureEdtior templateType="checklist" />
             </div>
             <div className={shared.body}>
                 <ChecklistBody />

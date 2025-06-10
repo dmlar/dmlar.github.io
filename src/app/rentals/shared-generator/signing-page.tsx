@@ -22,16 +22,18 @@ export const SigningPage: React.FC<{
             </div>
         </CustomRepeatable>
         <h3>LANDLORD SIGNATURE</h3>
-        <div>
-            <div className={styles.signatureSection}>
-                <div className={styles.signature}></div>
-                <CustomText field='landlordName' />
-            </div>
-            <div className={styles.signatureSection}>
-                <div className={styles.date}>
+        <CustomRepeatable field="landlord">
+            <div>
+                <div className={styles.signatureSection}>
+                    <div className={styles.signature}></div>
+                    <CustomText field='name' />
                 </div>
-                <span>Date</span>
+                <div className={styles.signatureSection}>
+                    <div className={styles.date}>
+                    </div>
+                    <span>Date</span>
+                </div>
             </div>
-        </div>
+        </CustomRepeatable>
     </div>;
 }
